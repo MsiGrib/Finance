@@ -26,14 +26,6 @@ namespace InternalApi.EntityGateWay
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<UserDTO?> GetByEmailAsync(string email)
-        {
-            return await _context.Users
-                .AsNoTracking()
-                .Where(u => u.Email == email)
-                .FirstOrDefaultAsync();
-        }
-
         public async Task<UserDTO?> GetByKredsAsync(string login)
         {
             return await _context.Users

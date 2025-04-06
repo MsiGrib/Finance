@@ -1,0 +1,21 @@
+﻿@using MudBlazor
+
+<MudDialog Class="dialog__window">
+    <TitleContent>
+        @Title
+    </TitleContent>
+    <DialogContent>
+        @Message
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<style>
+    .dialog__window {
+        min-width: 400px;
+        min-height: 200px;
+    }
+</style>

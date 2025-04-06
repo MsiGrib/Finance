@@ -12,8 +12,8 @@ namespace DataModel.DataBase
     {
         Task<List<T1>> GetAllAsync();
         Task<T1?> GetByIdAsync(T2 id);
-        Task AddAsync(T1 entity);
-        Task UpdateAsync(T1 entity);
-        Task DeleteByIdAsync(T2 id);
+        Task<bool> AddAsync(T1 entity);
+        Task<bool> UpdateAsync(T1 entity);
+        Task<bool> DeleteByIdAsync(T2 id);
     }
 }

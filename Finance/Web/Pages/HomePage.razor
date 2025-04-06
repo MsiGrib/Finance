@@ -1,0 +1,41 @@
+﻿@page "/"
+@using MudBlazor
+
+<MudContainer MaxWidth="MaxWidth.False" Class="home-container">
+    <MudPaper Elevation="0" Class="home-overlay">
+        <MudText Typo="Typo.h2" Class="home-title">Добро пожаловать!</MudText>
+        <MudText Typo="Typo.body1" Class="home-description">
+            Наши финансы
+        </MudText>
+    </MudPaper>
+</MudContainer>
+
+<style>
+    .home-container {
+        position: relative;
+        width: 100%;
+        height: 45vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: url('home.jpg') no-repeat center center;
+        background-size: cover;
+    }
+
+    .home-overlay {
+        background: rgba(0, 0, 0, 0.5);
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        color: white;
+    }
+
+    .home-title {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .home-description {
+        font-size: 1.2rem;
+    }
+</style>

@@ -1,6 +1,7 @@
 ﻿using DataModel.ModelsRequest;
 using DataModel.ModelsResponse;
 using InternalApi.Service;
+using InternalApi.Utilitys;
 using InternalApi.Validators;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -93,9 +94,7 @@ namespace InternalApi.Controllers
                     });
                 }
 
-                DateTime.TryParse(request.Birthday, out var birthday);
-                var registrResult = await _userService.RegistrationUserAsync(request.Login, request.Password, request.NumberPhone, request.LastName, request.FirstName, request.Email, birthday);
-                bool statusProfile = await _userProfileService.PrimaryProfileConsciousness(registrResult.First);
+                var registrResult = await _userService.RegistrationUserAsync(request.Login, request.Password, request.Email);
 
                 if (!registrResult.Second)
                 {

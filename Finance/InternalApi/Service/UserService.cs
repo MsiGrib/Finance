@@ -1,6 +1,7 @@
 ﻿using DataModel.DataBase;
 using DataModel.DataStructures;
 using InternalApi.EntityGateWay;
+using InternalApi.Utilitys;
 
 namespace InternalApi.Service
 {
@@ -39,12 +40,9 @@ namespace InternalApi.Service
             return users.Any(x => x.Login == login && x.Email == email);
         }
 
-        public async Task<Pair<UserDTO, bool>> RegistrationUserAsync(string login, string password, string numberPhone, string lastName,
-            string firstName, string email, DateTime birthday)
+        public async Task<Pair<UserDTO, bool>> RegistrationUserAsync(string login, string password, string email)
         {
-            if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password)
-                || string.IsNullOrEmpty(numberPhone) || string.IsNullOrEmpty(lastName)
-                || string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(email))
+            if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(email))
             {
                 throw new Exception("Пустые данные!");
             }

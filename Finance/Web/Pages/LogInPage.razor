@@ -1,0 +1,35 @@
+﻿@page "/LogIn"
+@using MudBlazor
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="login-container">
+    <MudPaper Class="login-paper" Elevation="6">
+        <MudText Typo="Typo.h4" Class="text-center mb-4">Авторизация</MudText>
+
+        <MudTextField @bind-Value="_login" Label="Логин" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Person" FullWidth="true" />
+        <MudTextField @bind-Value="_password" Label="Пароль" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Lock" FullWidth="true" InputType="InputType.Password" />
+
+        <MudButton OnClick="OnLogIn" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Class="mt-3">Войти</MudButton>
+        <MudDivider Class="my-4" />
+        <MudButton OnClick="OnSignIn" Variant="Variant.Text" Color="Color.Secondary" FullWidth="true">Регистрация</MudButton>
+    </MudPaper>
+</MudContainer>
+
+<style>
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 60vh;
+    }
+
+    .login-paper {
+        padding: 2rem;
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+</style>
