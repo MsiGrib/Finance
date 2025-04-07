@@ -40,6 +40,8 @@ namespace Web.Pages
 
                 await UserStorage.SetToken(response.Data.Token);
                 await UserStorage.SetExpirationToken(response.Data.ExpirationTimeToken.ToString());
+
+                Navigation.NavigateTo("/Finance");
             }
             else
             {

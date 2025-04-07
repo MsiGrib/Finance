@@ -6,12 +6,17 @@ namespace InternalApi.EntityGateWay
     public class FinanceDBContext : DbContext
     {
         public DbSet<UserDTO> Users { get; set; }
+        public DbSet<MainBoardDTO> MainBoards { get; set; }
+        public DbSet<PlotDTO> Plots { get; set; }
+        public DbSet<TableDTO> Tables { get; set; }
 
         public FinanceDBContext(DbContextOptions<FinanceDBContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            BindingTable(modelBuilder);
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
@@ -25,6 +30,21 @@ namespace InternalApi.EntityGateWay
                         ConfigureIdProperty(modelBuilder, entityClrType, idProperty.ClrType);
                 }
             }
+        }
+
+        private void BindingTable(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PlotDTO>()
+                .HasOne(p => p.Table)
+                .WithOne(t => t.Plot)
+                .HasForeignKey<TableDTO>(t => t.PlotId)
+                .IsRequired();
+
+            modelBuilder.Entity<TableDTO>()
+                .HasOne(t => t.MainBoard)
+                .WithOne(b => b.Table)
+                .HasForeignKey<MainBoardDTO>(b => b.TableId)
+                .IsRequired();
         }
 
         private void ConfigureIdProperty(ModelBuilder modelBuilder, Type entityType, Type idType)
