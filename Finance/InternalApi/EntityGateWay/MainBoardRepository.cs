@@ -16,6 +16,7 @@ namespace InternalApi.EntityGateWay
         {
             return await _context.MainBoards
                 .Include(x => x.Table)
+                .ThenInclude(y => y.Plot)
                 .ToListAsync();
         }
 

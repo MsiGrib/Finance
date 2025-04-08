@@ -1,4 +1,5 @@
 
+using DataModel.DataBase;
 using InternalApi.EntityGateWay;
 using InternalApi.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -67,6 +68,11 @@ namespace InternalApi
         {
             serviceCollection.AddScoped<IUserRepository, UserRepository>();
             serviceCollection.AddScoped<IUserService, UserService>();
+
+            serviceCollection.AddScoped<IRepository<PlotDTO, long>, PlotRepository>();
+            serviceCollection.AddScoped<IRepository<TableDTO, long>, TableRepository>();
+            serviceCollection.AddScoped<IRepository<MainBoardDTO, long>, MainBoardRepository>();
+            serviceCollection.AddScoped<FinanceService>();
         }
 
         private static void AuthenticationBinding(IServiceCollection serviceCollection, BasicConfiguration configuration)

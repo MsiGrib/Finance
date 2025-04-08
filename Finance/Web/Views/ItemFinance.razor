@@ -3,13 +3,19 @@
 <MudCard>
     <MudCardContent>
         <MudGrid>
-            <!-- Название и дополнительное название -->
+            <!-- Изображение + название (и доп. название) -->
             <MudItem xs="12" sm="4">
-                <MudText Typo="Typo.h6">@Name</MudText>
-                @if (!string.IsNullOrEmpty(OptionalName))
-                {
-                    <MudText Color="Color.Secondary">@OptionalName</MudText>
-                }
+                <MudStack Direction="Row" AlignItems="AlignItems.Center" Spacing="1">
+                    <!-- Изображение размером 32x32, преобразованное из массива байт -->
+                    <MudAvatar Src="@GetImageSrc()" Alt="Изображение" Style="width:32px; height:32px;" />
+                    <MudStack>
+                        <MudText Typo="Typo.h6">@Name</MudText>
+                        @if (!string.IsNullOrEmpty(SubName))
+                        {
+                            <MudText Color="Color.Secondary">@SubName</MudText>
+                        }
+                    </MudStack>
+                </MudStack>
             </MudItem>
 
             <!-- Цена -->
