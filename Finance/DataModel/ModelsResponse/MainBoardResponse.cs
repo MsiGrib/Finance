@@ -10,6 +10,15 @@ namespace DataModel.ModelsResponse
 {
     public class MainBoardResponse
     {
-        public List<Pair<int, TableDTO>> Tables { get; set; }
+        public List<Tuple<int, TableView>> MainBoards { get; set; }
+    }
+
+    public class TableView
+    {
+        public string Name { get; set; }
+        public string SubName { get; set; }
+        public string Currency { get; set; }
+        public string ImageBase64 { get; set; }
+        public List<PlotDTO> Plots { get; set; }
     }
 }

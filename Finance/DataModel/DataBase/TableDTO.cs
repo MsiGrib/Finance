@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace DataModel.DataBase
@@ -14,9 +15,9 @@ namespace DataModel.DataBase
         public required string Currency { get; set; }
         public string ImagePath { get; set; }
 
+        [JsonIgnore]
         public virtual MainBoardDTO MainBoard { get; set; }
 
-        public required long PlotId { get; set; }
-        public virtual PlotDTO Plot { get; set; }
+        public virtual ICollection<PlotDTO> Plots { get; set; } = new List<PlotDTO>();
     }
 }

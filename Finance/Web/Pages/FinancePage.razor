@@ -1,12 +1,31 @@
 ﻿@page "/Finance"
 @using MudBlazor
+@using Web.Views
 
-<MudContainer MaxWidth="MaxWidth.Small">
-    <MudPaper Class="pa-4">
-        <MudStack Spacing="2">
-            
-        </MudStack>
-    </MudPaper>
+<MudContainer MaxWidth="MaxWidth.Large">
+    @if (_mainBoardData?.MainBoards == null)
+    {
+        <MudProgressCircular Color="Color.Primary" />
+    }
+    else if (!_mainBoardData.MainBoards.Any())
+    {
+        <MudText>No data available</MudText>
+    }
+    else
+    {
+        <MudPaper Class="pa-4">
+            <MudStack Spacing="2">
+                @foreach (var board in _mainBoardData.MainBoards.OrderBy(b => b.Item1))
+                {
+                    var tableView = board.Item2;
+                    <ItemFinance
+                        Name="@tableView.Name"
+                        SubName="@tableView.SubName"
+                        Price="@($"{tableView.Plots.LastOrDefault()?.Price:N2} {tableView.Currency}")"
+                        ImageBase64="@tableView.ImageBase64"
+                        Plots="@tableView.Plots" />
+                }
+            </MudStack>
+        </MudPaper>
+    }
 </MudContainer>
-
-

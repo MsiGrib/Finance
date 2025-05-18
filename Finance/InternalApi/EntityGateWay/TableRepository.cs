@@ -15,7 +15,7 @@ namespace InternalApi.EntityGateWay
         public async Task<List<TableDTO>> GetAllAsync()
         {
             return await _context.Tables
-                .Include(x => x.Plot)
+                .Include(x => x.Plots)
                 .ToListAsync();
         }
 
@@ -23,7 +23,7 @@ namespace InternalApi.EntityGateWay
         {
             return await _context.Tables
                 .AsNoTracking()
-                .Include(x => x.Plot)
+                .Include(x => x.Plots)
                 .Where(x => x.Id == id)
                 .FirstOrDefaultAsync();
         }

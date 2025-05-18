@@ -1,0 +1,46 @@
+﻿@page "/Report"
+@using MudBlazor
+
+<MudStack Direction="Column"
+          JustifyContent="Center"
+          AlignItems="AlignItems.Center"
+          Spacing="2"
+          Style="height:100vh; width:300px; margin:auto; padding:16px;">
+
+    <MudButton FullWidth="true"
+               OnClick="DownloadWord"
+               Variant="Variant.Filled"
+               Color="Color.Primary">
+        Word
+    </MudButton>
+
+    <MudButton FullWidth="true"
+               OnClick="DownloadExcel"
+               Variant="Variant.Filled"
+               Color="Color.Primary">
+        Excel
+    </MudButton>
+
+    <MudButton FullWidth="true"
+               OnClick="DownloadJson"
+               Variant="Variant.Filled"
+               Color="Color.Primary">
+        JSON
+    </MudButton>
+
+</MudStack>
+
+
+<script>
+    async function downloadFileFromStream(fileName, contentStreamReference) {
+        const arrayBuffer = await contentStreamReference.arrayBuffer();
+        const blob = new Blob([arrayBuffer]);
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement('a');
+
+        anchor.href = url;
+        anchor.download = fileName;
+        anchor.click();
+        URL.revokeObjectURL(url);
+    }
+</script>

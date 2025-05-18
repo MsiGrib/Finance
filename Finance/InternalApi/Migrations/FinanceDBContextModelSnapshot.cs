@@ -58,7 +58,12 @@ namespace InternalApi.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
+                    b.Property<long>("TableId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TableId");
 
                     b.ToTable("Plots");
                 });
@@ -83,17 +88,11 @@ namespace InternalApi.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long>("PlotId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("SubName")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PlotId")
-                        .IsUnique();
 
                     b.ToTable("Tables");
                 });
@@ -133,27 +132,23 @@ namespace InternalApi.Migrations
                     b.Navigation("Table");
                 });
 
-            modelBuilder.Entity("DataModel.DataBase.TableDTO", b =>
+            modelBuilder.Entity("DataModel.DataBase.PlotDTO", b =>
                 {
-                    b.HasOne("DataModel.DataBase.PlotDTO", "Plot")
-                        .WithOne("Table")
-                        .HasForeignKey("DataModel.DataBase.TableDTO", "PlotId")
+                    b.HasOne("DataModel.DataBase.TableDTO", "Table")
+                        .WithMany("Plots")
+                        .HasForeignKey("TableId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Plot");
-                });
-
-            modelBuilder.Entity("DataModel.DataBase.PlotDTO", b =>
-                {
-                    b.Navigation("Table")
-                        .IsRequired();
+                    b.Navigation("Table");
                 });
 
             modelBuilder.Entity("DataModel.DataBase.TableDTO", b =>
                 {
                     b.Navigation("MainBoard")
                         .IsRequired();
+
+                    b.Navigation("Plots");
                 });
 #pragma warning restore 612, 618
         }

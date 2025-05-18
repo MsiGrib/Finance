@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using DataModel.DataBase;
+using Microsoft.AspNetCore.Components;
+using MudBlazor;
+using MudBlazor.Charts;
 
 namespace Web.Views
 {
@@ -6,18 +9,36 @@ namespace Web.Views
     {
         [Parameter] public string Name { get; set; }
         [Parameter] public string SubName { get; set; }
-        [Parameter] public decimal Price { get; set; }
-        [Parameter] public List<double> ChartData { get; set; } = new List<double>();
-        [Parameter] public List<string> ChartLabels { get; set; } = new List<string>();
-        [Parameter] public byte[] ImageData { get; set; }
+        [Parameter] public string Price { get; set; }
+        [Parameter] public string ImageBase64 { get; set; }
+        [Parameter] public List<PlotDTO> Plots { get; set; }
 
-        private string GetImageSrc()
+        private string _imageBase64;
+        private int _index = -1;
+        private ChartOptions _options = new ChartOptions();
+        private AxisChartOptions _axisChartOptions = new AxisChartOptions();
+        private List<ChartSeries> _series = new List<ChartSeries>();
+        private string[] _xAxisLabels;
+
+        protected override async Task OnParametersSetAsync()
         {
-            if (ImageData == null || ImageData.Length == 0)
-                return string.Empty;
-
-            var base64 = Convert.ToBase64String(ImageData);
-            return $"data:image/png;base64,{base64}";
+            _imageBase64 = ImageBase64;
+            _series = new List<ChartSeries>()
+            {
+                new ChartSeries() { Name = "Price", Data = Plots.OrderBy(p => p.Date).Select(p => (double)p.Price).ToArray(), ShowDataMarkers = true },
+            };
+            _options = new ChartOptions()
+            {
+                
+            };
+            _axisChartOptions = new AxisChartOptions()
+            {
+                MatchBoundsToSize = true,
+            };
+            _xAxisLabels = Plots
+                .OrderBy(p => p.Date)
+                .Select(p => p.Date.ToString("dd.MM.yy"))
+                .ToArray();
         }
     }
 }

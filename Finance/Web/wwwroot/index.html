@@ -33,3 +33,11 @@
 </body>
 
 </html>
+
+<script>
+    window.registerLeaveHandler = function (dotNetHelper) {
+        window.addEventListener('beforeunload', () => {
+            dotNetHelper.invokeMethodAsync('OnLeave');
+        });
+    };
+</script>

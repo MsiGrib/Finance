@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InternalApi", "InternalApi\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataModel", "DataModel\DataModel.csproj", "{EFE75442-1F12-4846-8669-ACFAE9027671}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cryptograf", "Cryptograf\Cryptograf.csproj", "{09758D69-B512-4AFB-8D88-EDAC1855D71A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{EFE75442-1F12-4846-8669-ACFAE9027671}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFE75442-1F12-4846-8669-ACFAE9027671}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFE75442-1F12-4846-8669-ACFAE9027671}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09758D69-B512-4AFB-8D88-EDAC1855D71A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09758D69-B512-4AFB-8D88-EDAC1855D71A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09758D69-B512-4AFB-8D88-EDAC1855D71A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09758D69-B512-4AFB-8D88-EDAC1855D71A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

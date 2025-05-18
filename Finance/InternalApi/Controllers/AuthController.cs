@@ -1,9 +1,12 @@
-﻿using DataModel.ModelsRequest;
+﻿using Cryptograf;
+using DataModel.ModelsRequest;
 using DataModel.ModelsResponse;
 using InternalApi.Service;
 using InternalApi.Utilitys;
 using InternalApi.Validators;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternalApi.Controllers
@@ -15,12 +18,14 @@ namespace InternalApi.Controllers
         private readonly ILogger<AuthController> _logger;
         private readonly IUserService _userService;
         private readonly BasicConfiguration _basicConfiguration;
+        private readonly ICryptoService _cryptoService;
 
-        public AuthController(ILogger<AuthController> logger, IUserService userService, BasicConfiguration basicConfiguration)
+        public AuthController(ILogger<AuthController> logger, IUserService userService, BasicConfiguration basicConfiguration, ICryptoService cryptoService)
         {
             _logger = logger;
             _userService = userService;
             _basicConfiguration = basicConfiguration;
+            _cryptoService = cryptoService;
         }
 
         [HttpPost("Authorization")]
@@ -37,7 +42,7 @@ namespace InternalApi.Controllers
                     });
                 }
 
-                var user = await _userService.AuthorizationUserAsync(request.Login, request.Password);
+                var user = await _userService.AuthorizationUserAsync(_cryptoService.DecryptString(request.Login), _cryptoService.DecryptString(request.Password));
 
                 if (user == null)
                 {
@@ -48,7 +53,7 @@ namespace InternalApi.Controllers
                     });
                 }
 
-                string token = TokenUtility.CreateJWTToken(_basicConfiguration.SecretJWT, _basicConfiguration.IssuerJWT, _basicConfiguration.AudienceJWT, user.Id.ToString(), DateTime.Now.AddHours(3));
+                string token = TokenUtility.CreateJWTToken(_basicConfiguration.SecretJWT, _basicConfiguration.IssuerJWT, _basicConfiguration.AudienceJWT, user.Id.ToString(), DateTime.Now.AddHours(6));
 
                 return Ok(new ApiResponse<AuthorizationResponse>
                 {
@@ -56,8 +61,8 @@ namespace InternalApi.Controllers
                     Message = "Авторизация прошла успешно!",
                     Data = new AuthorizationResponse
                     {
-                        ExpirationTimeToken = DateTime.Now.AddHours(3),
-                        Token = token,
+                        ExpirationTimeToken = DateTime.Now.AddHours(6),
+                        Token = _cryptoService.EncryptString(token),
                     }
                 });
             }
@@ -85,7 +90,11 @@ namespace InternalApi.Controllers
                     });
                 }
 
-                if (await _userService.IsExistsRegistrUserAsync(request.Login, request.Email))
+                string login = _cryptoService.DecryptString(request.Login);
+                string password = _cryptoService.DecryptString(request.Password);
+                string email = _cryptoService.DecryptString(request.Email);
+
+                if (await _userService.IsExistsRegistrUserAsync(login, email))
                 {
                     return BadRequest(new BaseResponse
                     {
@@ -94,7 +103,7 @@ namespace InternalApi.Controllers
                     });
                 }
 
-                var registrResult = await _userService.RegistrationUserAsync(request.Login, request.Password, request.Email);
+                var registrResult = await _userService.RegistrationUserAsync(login, password, email);
 
                 if (!registrResult.Second)
                 {

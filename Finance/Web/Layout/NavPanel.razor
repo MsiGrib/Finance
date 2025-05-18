@@ -4,12 +4,12 @@
 <MudItem Class="@(IsOpen ? "nav__panel open" : "nav__panel")">
     <MudDrawerContainer Class="mud-height-full">
         <MudDrawer @bind-Open="IsOpen"
-                   Fixed="true"
-                   Elevation="1"
-                   Variant="DrawerVariant.Mini"
-                   OpenMiniOnHover="true"
-                   MiniVariantWidth="50px"
-                   Width="200px">
+        Fixed="true"
+        Elevation="1"
+        Variant="DrawerVariant.Mini"
+        OpenMiniOnHover="true"
+        MiniVariantWidth="50px"
+        Width="200px">
 
             <MudItem Class="nav__item">
                 <MudButton OnClick="NavigationToHome" Class="mt-2" FullWidth="true" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Home" Color="Color.Primary">
@@ -18,12 +18,39 @@
                         <MudText>Главная</MudText>
                     }
                 </MudButton>
-                <MudButton OnClick="NavigationToLogIn" Class="mb-2 button__low" FullWidth="true" Variant="Variant.Text" StartIcon="@Icons.Material.Filled.AccountBox" Color="Color.Primary">
-                    @if (IsOpen)
-                    {
-                        <MudText>Вход</MudText>
-                    }
-                </MudButton>
+                @if (AuthState.IsAuthenticated)
+                {
+                    <MudButton OnClick="NavigationToFinance" Class="mt-2" FullWidth="true" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.SsidChart" Color="Color.Primary">
+                        @if (IsOpen)
+                        {
+                            <MudText>Графики</MudText>
+                        }
+                    </MudButton>
+                    <MudButton OnClick="NavigationToReport" Class="mt-2" FullWidth="true" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.DocumentScanner" Color="Color.Primary">
+                        @if (IsOpen)
+                        {
+                            <MudText>Отчёты</MudText>
+                        }
+                    </MudButton>
+                }
+                @if (!AuthState.IsAuthenticated)
+                {
+                    <MudButton OnClick="NavigationToLogIn" Class="mb-2 button__low" FullWidth="true" Variant="Variant.Text" StartIcon="@Icons.Material.Filled.AccountBox" Color="Color.Primary">
+                        @if (IsOpen)
+                        {
+                            <MudText>Вход</MudText>
+                        }
+                    </MudButton>
+                }
+                else
+                {
+                    <MudButton OnClick="LogOut" Class="mb-2 button__low" FullWidth="true" Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Person" Color="Color.Primary">
+                        @if (IsOpen)
+                        {
+                            <MudText>Выход</MudText>
+                        }
+                    </MudButton>
+                }
             </MudItem>
         </MudDrawer>
     </MudDrawerContainer>

@@ -1,4 +1,5 @@
-﻿using DataModel.ModelsRequest;
+﻿using Cryptograf;
+using DataModel.ModelsRequest;
 using DataModel.ModelsResponse;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -14,6 +15,7 @@ namespace Web.Pages
         [Inject] public required ISnackbar Snackbar { get; set; }
         [Inject] public required UniversalApiManager UniversalApiManager { get; set; }
         [Inject] public required BasicConfiguration BasicConfiguration { get; set; }
+        [Inject] public required ICryptoService CriptoService { get; set; }
 
         private string _login = string.Empty;
         private string _password = string.Empty;
@@ -35,9 +37,9 @@ namespace Web.Pages
 
             var request = new RegistrationRequest
             {
-                Login = _login,
-                Password = _password,
-                Email = _email,
+                Login = CriptoService.EncryptString(_login),
+                Password = CriptoService.EncryptString(_password),
+                Email = CriptoService.EncryptString(_email),
             };
 
             string url = $"{BasicConfiguration.ApiUrl}api/Auth/Registration";

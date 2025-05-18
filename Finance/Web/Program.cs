@@ -1,7 +1,11 @@
 using Blazored.LocalStorage;
+using Cryptograf;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using MudBlazor.Services;
+using Web.Helpers;
+using Web.StateServices;
 
 namespace Web;
 
@@ -24,13 +28,18 @@ public class Program
 
     private static void ConfigurationServices(WebAssemblyHostBuilder builder)
     {
-        builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+        builder.Services.AddScoped(sp => new HttpClient
+        {
+            BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+        });
 
         builder.Services.AddSingleton<BasicConfiguration>(sp =>
         {
             var configuration = sp.GetRequiredService<IConfiguration>();
             return new BasicConfiguration(configuration);
         });
+
+        builder.Services.AddSingleton<ICryptoService, CryptoService>();
 
         var config = new BasicConfiguration(builder.Configuration);
 
@@ -45,5 +54,8 @@ public class Program
             var localStorageService = provider.GetRequiredService<ILocalStorageService>();
             return new UserStorage(localStorageService);
         });
+
+        builder.Services.AddScoped<AuthStateService>();
+        builder.Services.AddScoped<LeaveHelper>();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Blazored.LocalStorage;
+using System.Globalization;
 
 namespace Web
 {
@@ -34,7 +35,24 @@ namespace Web
         public async Task Clear()
         {
             await _localStorage.RemoveItemAsync("token");
-            await _localStorage.RemoveItemAsync("expiration");
+            await _localStorage.RemoveItemAsync("expirationToken");
+        }
+
+        public async Task<bool> CheckTokenExpiration()
+        {
+            const string format = "dd.MM.yyyy HH:mm:ss";
+            string expirationString = await GetExpirationToken();
+
+            if (!DateTime.TryParseExact(expirationString,
+                format,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out DateTime expirationDate))
+            {
+                return false;
+            }
+
+            return expirationDate > DateTime.Now;
         }
     }
 }

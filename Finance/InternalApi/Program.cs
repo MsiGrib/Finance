@@ -1,8 +1,11 @@
 
+using Cryptograf;
 using DataModel.DataBase;
 using InternalApi.EntityGateWay;
 using InternalApi.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -15,9 +18,17 @@ namespace InternalApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
+
+            builder.Services.AddRateLimiter(_ =>
+            {
+                _.AddFixedWindowLimiter("default", options =>
+                {
+                    options.PermitLimit = 10;
+                    options.Window = TimeSpan.FromSeconds(1);
+                    options.QueueLimit = 0;
+                });
+            });
 
             builder.Services.AddCors(options =>
             {
@@ -29,7 +40,6 @@ namespace InternalApi
                 });
             });
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
             {
@@ -50,13 +60,21 @@ namespace InternalApi
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ContentTypeProvider = new FileExtensionContentTypeProvider
+                {
+                    Mappings = { [".svg"] = "image/svg+xml" }
+                }
+            });
+
+            app.UseRateLimiter();
             app.UseHttpsRedirection();
             app.UseCors("AllowAll");
             app.UseAuthorization();
@@ -66,13 +84,19 @@ namespace InternalApi
 
         private static void ServicesBinding(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<IUserRepository, UserRepository>();
-            serviceCollection.AddScoped<IUserService, UserService>();
-
             serviceCollection.AddScoped<IRepository<PlotDTO, long>, PlotRepository>();
             serviceCollection.AddScoped<IRepository<TableDTO, long>, TableRepository>();
             serviceCollection.AddScoped<IRepository<MainBoardDTO, long>, MainBoardRepository>();
+
+            serviceCollection.AddScoped<IUserRepository, UserRepository>();
+            serviceCollection.AddScoped<IUserService, UserService>();
+            serviceCollection.AddScoped<ITableService, TableService>();
+            serviceCollection.AddScoped<IPlotService, PlotService>();
+
             serviceCollection.AddScoped<FinanceService>();
+            serviceCollection.AddScoped<ReportService>();
+
+            serviceCollection.AddSingleton<ICryptoService, CryptoService>();
         }
 
         private static void AuthenticationBinding(IServiceCollection serviceCollection, BasicConfiguration configuration)

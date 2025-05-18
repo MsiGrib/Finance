@@ -34,17 +34,21 @@ namespace InternalApi.EntityGateWay
 
         private void BindingTable(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<PlotDTO>()
-                .HasOne(p => p.Table)
-                .WithOne(t => t.Plot)
-                .HasForeignKey<TableDTO>(t => t.PlotId)
+            modelBuilder.Entity<TableDTO>()
+                .HasMany(t => t.Plots)
+                .WithOne(p => p.Table)
+                .HasForeignKey(p => p.TableId)
                 .IsRequired();
 
-            modelBuilder.Entity<TableDTO>()
-                .HasOne(t => t.MainBoard)
-                .WithOne(b => b.Table)
+            modelBuilder.Entity<MainBoardDTO>()
+                .HasOne(b => b.Table)
+                .WithOne(t => t.MainBoard)
                 .HasForeignKey<MainBoardDTO>(b => b.TableId)
                 .IsRequired();
+
+            modelBuilder.Entity<MainBoardDTO>()
+                .HasIndex(b => b.TableId)
+                .IsUnique();
         }
 
         private void ConfigureIdProperty(ModelBuilder modelBuilder, Type entityType, Type idType)
